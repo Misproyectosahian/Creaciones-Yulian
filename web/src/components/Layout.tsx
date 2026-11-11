@@ -8,6 +8,7 @@ import { whatsappLink } from '../lib/format';
 import {
   CartIcon,
   FacebookIcon,
+  GitHubIcon,
   GridIcon,
   HeartIcon,
   HomeIcon,
@@ -117,6 +118,51 @@ function MobileNav() {
   );
 }
 
+/** Datos del desarrollador de la página (créditos en el pie de página). */
+const DEVELOPER = {
+  name: 'Ahian Quesada',
+  role: 'Desarrollador Full-Stack · Ingeniería en TI (UTN)',
+  whatsapp: '89649932',
+  github: 'https://github.com/Ahian0',
+  skills: ['React', 'Flutter', 'Python', 'Firebase'],
+};
+
+function DeveloperCredits() {
+  return (
+    <aside className="dev-card" aria-label="Desarrollador de esta página">
+      <div className="dev-card__avatar" aria-hidden="true">
+        AQ
+      </div>
+      <div className="dev-card__body">
+        <span className="dev-card__label">💻 Página desarrollada por</span>
+        <h3 className="dev-card__name">{DEVELOPER.name}</h3>
+        <p className="dev-card__role">{DEVELOPER.role}</p>
+        <p className="dev-card__text">
+          ¿Querés una página web o una app como esta para tu negocio? Creo tiendas en línea, apps móviles y sistemas a la medida.
+        </p>
+        <ul className="dev-card__skills" aria-label="Tecnologías">
+          {DEVELOPER.skills.map((s) => (
+            <li key={s}>{s}</li>
+          ))}
+        </ul>
+      </div>
+      <div className="dev-card__actions">
+        <a
+          className="btn btn--whatsapp btn--sm"
+          href={whatsappLink(DEVELOPER.whatsapp, '¡Hola Ahian! 👋 Vi la página de Creaciones Yulian y me interesa una página o app.')}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <WhatsAppIcon size={18} /> Escribime · 8964-9932
+        </a>
+        <a className="btn btn--soft btn--sm" href={DEVELOPER.github} target="_blank" rel="noreferrer">
+          <GitHubIcon size={18} /> GitHub
+        </a>
+      </div>
+    </aside>
+  );
+}
+
 function Footer() {
   const { settings, categories } = useStore();
   const [effectsOn, setEffectsOn] = useState(effects.userPreference);
@@ -198,6 +244,9 @@ function Footer() {
             <SparkleIcon size={16} /> Efectos mágicos: {effectsOn ? 'activados' : 'desactivados'}
           </button>
         </div>
+      </div>
+      <div className="container">
+        <DeveloperCredits />
       </div>
       <p className="footer__copy">
         © {year} {settings.storeName} · Hecho a mano con 💖 en Costa Rica
