@@ -44,7 +44,8 @@
   --header-h: 66px;
   --mobile-nav-h: 66px;
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  color-scheme: light;
+  /* "only light": que el modo oscuro forzado del navegador no cambie los colores */
+  color-scheme: only light;
 }
 
 *,
