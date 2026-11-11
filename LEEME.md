@@ -67,19 +67,9 @@ Todo funciona con planes **gratuitos y sin tarjeta de crédito**:
 ### 2. Cloudinary (fotos)
 
 1. Creá una cuenta gratis en <https://cloudinary.com>.
-2. En el *Dashboard* (o *Settings → API Keys*) copiá **Cloud name**, **API Key** y **API Secret**.  (API Keys
-Cloud name: m1hrg07f
-Manage API key and secret pairs for your product environment. To build the environment variable for each pair, copy the provided format and substitute your actual values for the placeholders. Make sure to store your secrets securely.
-API environment variable
-CLOUDINARY_URL=cloudinary://<your_api_key>:<your_api_secret>@m1hrg07f
-API Key	API Secret		
-Root
-Root
-Nov 10, 2026	
-833185759792332
-RWbTBu0X0H-TP6yiBJ9bM6_J7O4
-Active
-)
+2. En el *Dashboard* (o *Settings → API Keys*) copiá **Cloud name**, **API Key** y **API Secret**.
+   Cloud name de este proyecto: `m1hrg07f` (no es secreto).
+   ⚠️ **El API Key y el API Secret NO se escriben en este archivo** (se sube a GitHub): van solo en Netlify (paso 3).
 
 ### 3. Netlify (página web)
 
