@@ -7,9 +7,10 @@
   functions = "netlify/functions"
 
 [build.environment]
-  # Node 22 para compilar y para las funciones (firebase-admin requiere Node 22+)
-  NODE_VERSION = "22"
-  AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
+  # Node 24 para compilar y para las funciones: firebase-admin 14 usa librerías
+  # que solo son ESM (jose), y Node 24 las puede cargar con require().
+  NODE_VERSION = "24"
+  AWS_LAMBDA_JS_RUNTIME = "nodejs24.x"
   # La configuración web de Firebase y el ID del proyecto son PÚBLICOS (el navegador
   # los necesita), así que el detector de secretos de Netlify no debe bloquearlos.
   # La clave privada y los secretos de Cloudinary SÍ se siguen revisando.
