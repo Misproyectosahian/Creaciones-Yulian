@@ -66,7 +66,7 @@ export default function ProfileFields({
       <div className="field-row">
         <div className="field">
           <label htmlFor="pf-province">Provincia</label>
-          <select id="pf-province" value={value.province} onChange={set('province')} aria-invalid={!!errors.province}>
+          <select id="pf-province" autoComplete="address-level1" value={value.province} onChange={set('province')} aria-invalid={!!errors.province}>
             <option value="">Elegí...</option>
             {PROVINCES.map((p) => (
               <option key={p} value={p}>
@@ -78,7 +78,7 @@ export default function ProfileFields({
         </div>
         <div className="field">
           <label htmlFor="pf-canton">Cantón</label>
-          <input id="pf-canton" value={value.canton} onChange={set('canton')} maxLength={60} aria-invalid={!!errors.canton} placeholder="Ej: Escazú" />
+          <input id="pf-canton" autoComplete="address-level2" value={value.canton} onChange={set('canton')} maxLength={60} aria-invalid={!!errors.canton} placeholder="Ej: Escazú" />
           {errors.canton && <span className="field__error">{errors.canton}</span>}
         </div>
       </div>
@@ -86,7 +86,7 @@ export default function ProfileFields({
         <label htmlFor="pf-district">
           Distrito <span className="optional">(opcional)</span>
         </label>
-        <input id="pf-district" value={value.district} onChange={set('district')} maxLength={60} placeholder="Ej: San Rafael" />
+        <input id="pf-district" autoComplete="address-level3" value={value.district} onChange={set('district')} maxLength={60} placeholder="Ej: San Rafael" />
       </div>
       <div className="field">
         <label htmlFor="pf-address">
