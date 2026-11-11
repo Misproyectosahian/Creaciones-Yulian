@@ -10,6 +10,10 @@
   # Node 22 para compilar y para las funciones (firebase-admin requiere Node 22+)
   NODE_VERSION = "22"
   AWS_LAMBDA_JS_RUNTIME = "nodejs22.x"
+  # La configuración web de Firebase y el ID del proyecto son PÚBLICOS (el navegador
+  # los necesita), así que el detector de secretos de Netlify no debe bloquearlos.
+  # La clave privada y los secretos de Cloudinary SÍ se siguen revisando.
+  SECRETS_SCAN_OMIT_KEYS = "VITE_FIREBASE_API_KEY,VITE_FIREBASE_AUTH_DOMAIN,VITE_FIREBASE_PROJECT_ID,VITE_FIREBASE_STORAGE_BUCKET,VITE_FIREBASE_MESSAGING_SENDER_ID,VITE_FIREBASE_APP_ID,FIREBASE_PROJECT_ID,CLOUDINARY_CLOUD_NAME"
 
 [functions]
   node_bundler = "esbuild"
