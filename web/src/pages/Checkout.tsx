@@ -7,7 +7,7 @@ import { useStore } from '../context/StoreContext';
 import { useToast } from '../context/ToastContext';
 import { createOrder } from '../lib/api';
 import { effects } from '../lib/effects';
-import { crc, formatPhone } from '../lib/format';
+import { crc, formatPhone, hoursText } from '../lib/format';
 import { cld } from '../lib/image';
 import { useCartLines } from './CartPage';
 
@@ -32,6 +32,7 @@ export default function Checkout() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [detailsTouched, setDetailsTouched] = useState(false);
+  const [acceptPolicy, setAcceptPolicy] = useState(false);
 
   // Rellena la dirección con la del perfil
   useEffect(() => {
@@ -53,6 +54,10 @@ export default function Checkout() {
     setError(null);
     if (!method) {
       setError('Elegí una forma de entrega 🚚');
+      return;
+    }
+    if (!acceptPolicy) {
+      setError('Marcá la casilla de la política de cancelación para continuar 💕');
       return;
     }
     if (hasUnavailable || valid.length === 0) {
@@ -202,12 +207,35 @@ export default function Checkout() {
           <p className="summary__note">
             Después de confirmar te mostramos cómo pagar el adelanto por SINPE Móvil. El pedido queda "Pendiente de pago" hasta recibirlo.
           </p>
+          <div className="policy">
+            <p className="policy__title">⏳ Política de cancelación</p>
+            <p>
+              {settings.cancelWindowHours > 0 ? (
+                <>
+                  Podés cancelar tu pedido durante las primeras <strong>{hoursText(settings.cancelWindowHours)}</strong> después de
+                  hacerlo. Pasado ese tiempo <strong>ya no se puede cancelar</strong>, porque cada pieza se hace a mano 💕
+                </>
+              ) : (
+                <>
+                  Una vez confirmado, el pedido <strong>no se puede cancelar</strong>, porque cada pieza se hace a mano 💕
+                </>
+              )}
+            </p>
+            <label className="policy__check">
+              <input type="checkbox" checked={acceptPolicy} onChange={(e) => setAcceptPolicy(e.target.checked)} />
+              <span>
+                {settings.cancelWindowHours > 0
+                  ? `Entiendo que solo puedo cancelar durante las primeras ${hoursText(settings.cancelWindowHours)}.`
+                  : 'Entiendo que mi pedido no se puede cancelar.'}
+              </span>
+            </label>
+          </div>
           {error && (
             <div className="alert alert--error" role="alert">
               {error}
             </div>
           )}
-          <button type="submit" className="btn btn--primary btn--lg btn--block" disabled={sending}>
+          <button type="submit" className="btn btn--primary btn--lg btn--block" disabled={sending || !acceptPolicy}>
             {sending ? 'Creando tu pedido... 💫' : 'Confirmar pedido 💖'}
           </button>
           <Link to="/carrito" className="btn btn--link btn--block">

@@ -36,6 +36,8 @@ export interface StoreSettings {
   instagram: string;
   facebook: string;
   tiktok: string;
+  /** Horas que tiene el cliente para cancelar (0 = no se puede) */
+  cancelWindowHours: number;
 }
 
 export interface UserProfile {
@@ -91,5 +93,11 @@ export interface Order {
   neededBy: string;
   customerNotes: string;
   adminMessage: string;
+  /** Hasta cuándo el cliente puede cancelar (null = no se puede) */
+  cancelDeadline: number | null;
+  /** Horas de plazo que se aplicaron a este pedido (-1 = pedido anterior a la función) */
+  cancelWindowHours: number;
+  /** 'cliente' si lo canceló el cliente */
+  cancelledBy: string;
   createdAt: number | null;
 }

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 import { EmptyState, HeartLoader, StatusBadge } from '../components/Bits';
 import { CopyIcon, WhatsAppIcon } from '../components/Icons';
+import CancelBox from '../components/CancelBox';
 import OrderTimeline from '../components/OrderTimeline';
 import ProfileFields, { validateProfile, type ProfileForm } from '../components/ProfileFields';
 import { authErrorMessage, useAuth } from '../context/AuthContext';
@@ -230,6 +231,8 @@ export function OrderPage() {
             </div>
           </section>
         )}
+
+        <CancelBox order={o} />
 
         <div className="ticket__cut" aria-hidden="true" />
 

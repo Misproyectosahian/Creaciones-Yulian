@@ -56,11 +56,13 @@ class _HomeShellState extends State<HomeShell> {
   }
 
   void _onForegroundMessage(RemoteMessage message) {
-    Effects.confetti();
+    // Confeti solo para pedidos nuevos (no para cancelaciones)
+    final type = message.data['type']?.toString();
+    if (type == null || type == 'new_order' || type == 'test') Effects.confetti();
     final orderId = message.data['orderId']?.toString();
     showToast(
       message.notification?.title ?? '¡Nuevo pedido!',
-      emoji: '🎉',
+      emoji: type == 'order_cancelled' ? '🥀' : '🎉',
       action: orderId == null || orderId.isEmpty
           ? null
           : SnackBarAction(label: 'Ver', onPressed: () => _openOrder(orderId)),

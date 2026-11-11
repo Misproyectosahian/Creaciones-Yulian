@@ -73,6 +73,7 @@ export const DEFAULT_SETTINGS: StoreSettings = {
   instagram: '',
   facebook: '',
   tiktok: '',
+  cancelWindowHours: 24,
 };
 
 export function parseSettings(d: Data | undefined): StoreSettings {
@@ -90,6 +91,10 @@ export function parseSettings(d: Data | undefined): StoreSettings {
     instagram: str(d.instagram),
     facebook: str(d.facebook),
     tiktok: str(d.tiktok),
+    cancelWindowHours:
+      typeof d.cancelWindowHours === 'number' && Number.isFinite(d.cancelWindowHours)
+        ? Math.min(168, Math.max(0, Math.round(d.cancelWindowHours)))
+        : DEFAULT_SETTINGS.cancelWindowHours,
   };
 }
 
@@ -150,6 +155,9 @@ export function parseOrder(id: string, d: Data): Order {
     neededBy: str(d.neededBy),
     customerNotes: str(d.customerNotes),
     adminMessage: str(d.adminMessage),
+    cancelDeadline: toMillis(d.cancelDeadline),
+    cancelWindowHours: num(d.cancelWindowHours, -1),
+    cancelledBy: str(d.cancelledBy),
     createdAt: toMillis(d.createdAt),
   };
 }

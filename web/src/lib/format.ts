@@ -58,7 +58,20 @@ export function whatsappLink(phone: string, text?: string): string {
 export const normalize = (s: string) =>
   s
     .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase();
+
+/** 5h 3min → "5 h 03 min"; 12min 5s → "12 min 05 s" */
+export function formatRemaining(ms: number): string {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  if (h > 0) return `${h} h ${pad(m)} min`;
+  return `${m} min ${pad(s)} s`;
+}
+
+export const hoursText = (h: number) => (h === 1 ? '1 hora' : `${h} horas`);
 
 export const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;

@@ -10,7 +10,7 @@ export default function OrderTimeline({ order }: { order: Order }) {
       <div className="timeline-cancelled">
         <span aria-hidden="true">🥀</span>
         <div>
-          <strong>Pedido cancelado</strong>
+          <strong>{order.cancelledBy === 'cliente' ? 'Cancelaste este pedido' : 'Pedido cancelado'}</strong>
           <p>{at ? formatDateTime(at) : 'Si tenés dudas, escribinos por WhatsApp 💕'}</p>
         </div>
       </div>

@@ -261,6 +261,8 @@ class ShopOrder {
     required this.neededBy,
     required this.customerNotes,
     required this.adminMessage,
+    required this.cancelDeadline,
+    required this.cancelledBy,
     required this.seen,
     required this.createdAt,
   });
@@ -280,12 +282,24 @@ class ShopOrder {
   final String neededBy;
   final String customerNotes;
   final String adminMessage;
+
+  /// Hasta cuándo el cliente puede cancelar (null = no se puede).
+  final DateTime? cancelDeadline;
+
+  /// 'cliente' si lo canceló el cliente desde la web.
+  final String cancelledBy;
   final bool seen;
   final DateTime? createdAt;
 
   int get itemCount => items.fold(0, (total, i) => total + i.qty);
   int get balance => math.max(0, total - amountPaid);
   bool get depositCovered => amountPaid >= minDeposit;
+
+  /// El cliente todavía puede cancelar (dentro del plazo y sin empezar a hacerse).
+  bool get customerCanCancel =>
+      cancelDeadline != null &&
+      (status == OrderStatus.pendientePago || status == OrderStatus.pagoRecibido) &&
+      DateTime.now().isBefore(cancelDeadline!);
   String get cover => items.map((i) => i.image).firstWhere((s) => s.isNotEmpty, orElse: () => '');
 
   DateTime? dateOf(OrderStatus s) {
@@ -322,6 +336,8 @@ class ShopOrder {
       neededBy: _str(m['neededBy']),
       customerNotes: _str(m['customerNotes']),
       adminMessage: _str(m['adminMessage']),
+      cancelDeadline: _date(m['cancelDeadline']),
+      cancelledBy: _str(m['cancelledBy']),
       seen: _bool(m['seen'], true),
       createdAt: _date(m['createdAt']),
     );
@@ -345,6 +361,7 @@ class StoreSettings {
     this.facebook = '',
     this.tiktok = '',
     this.orderPrefix = 'CY',
+    this.cancelWindowHours = 24,
   }) : deliveryMethods = deliveryMethods ?? const ['Retiro en persona', 'Entrega a domicilio', 'Punto de encuentro'];
 
   final String storeName;
@@ -359,6 +376,9 @@ class StoreSettings {
   final String facebook;
   final String tiktok;
   final String orderPrefix;
+
+  /// Horas que tiene el cliente para cancelar después de pedir (0 = no puede cancelar).
+  final int cancelWindowHours;
 
   factory StoreSettings.fromMap(Map<String, dynamic>? m) {
     if (m == null) return StoreSettings();
@@ -377,6 +397,7 @@ class StoreSettings {
       facebook: _str(m['facebook']),
       tiktok: _str(m['tiktok']),
       orderPrefix: _str(m['orderPrefix'], d.orderPrefix),
+      cancelWindowHours: _int(m['cancelWindowHours'], d.cancelWindowHours).clamp(0, 168),
     );
   }
 
@@ -393,5 +414,6 @@ class StoreSettings {
         'facebook': facebook.trim(),
         'tiktok': tiktok.trim(),
         'orderPrefix': orderPrefix.trim().toUpperCase(),
+        'cancelWindowHours': cancelWindowHours.clamp(0, 168),
       };
 }

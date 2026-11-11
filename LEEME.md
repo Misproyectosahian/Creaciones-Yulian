@@ -141,6 +141,7 @@ En *Ajustes* de la app hay un botón **"Enviar notificación de prueba"** para c
 3. En la app: **Registrar pago** (monto recibido) → la app sugiere pasar a **"Pago recibido"**.
 4. Cambiar el estado a **"Pedido en proceso"**, **"Listo para entregar"**, etc. Cada cambio se ve en la web al instante. Después de cada cambio aparece **"Avisar 💬"** para mandarle al cliente un WhatsApp ya escrito con el enlace de seguimiento.
 5. "Mensaje para el cliente": un texto que el cliente ve en su página del pedido.
+6. **Cancelaciones:** el cliente puede cancelar solo durante las primeras horas que configurés en *Ajustes → Cancelaciones* (24 h por defecto; 0 = no se puede cancelar) y mientras el pedido esté "Pendiente de pago" o "Pago recibido". Antes de pedir, el cliente acepta esa política, y en su pedido ve una cuenta regresiva. Si cancela, te llega una notificación ❌.
 
 ---
 
@@ -194,12 +195,24 @@ Para la app: `cd admin_app && flutter run` con el celular conectado por USB (dep
 
 ---
 
-## Límites gratuitos (de sobra para empezar)
+## ¿Cuánto cuesta? (spoiler: $0)
 
-- **Firestore**: 50 000 lecturas y 20 000 escrituras por día. La web guarda caché local, así que las visitas repetidas casi no consumen.
-- **Netlify**: 125 000 llamadas a funciones y 100 GB de tráfico al mes.
-- **Cloudinary**: 25 créditos al mes (miles de fotos optimizadas).
-- **Notificaciones (FCM)**: ilimitadas.
+Ninguna cuenta tiene tarjeta de crédito registrada, así que **ningún servicio puede cobrar**. Si alguno llega a su límite gratis, lo peor que pasa es que se pausa hasta el mes (o día) siguiente.
+
+| Servicio | Gratis | Si se pasa del límite |
+|---|---|---|
+| **Notificaciones (FCM)** | Gratis, sin límite de cantidad | — |
+| **Firestore** (base de datos) | 50 000 lecturas y 20 000 escrituras **por día** | Deja de responder hasta el día siguiente |
+| **Authentication** (cuentas) | Gratis con correo y contraseña | — |
+| **Cloudinary** (fotos) | 25 créditos por mes (1 crédito ≈ 1 GB de fotos guardadas o enviadas, o 1 000 transformaciones) | Pide pasar a plan pago; sin tarjeta no cobra |
+| **Netlify** (web y servidor) | 300 créditos por mes | **Se pausa la web** hasta el mes siguiente |
+
+**Netlify es el que hay que cuidar.** Gasto aproximado:
+- **Cada publicación (deploy) = 15 créditos.** Por eso conviene juntar varios cambios en una sola subida. Los cambios solo en `admin_app/` o en este LEEME **no** publican (ver `ignore` en `netlify.toml`).
+- Tráfico: 20 créditos por GB. La web pesa ~170 KB la primera visita (las fotos las sirve Cloudinary, no Netlify), así que 1 GB ≈ 5 000 visitas nuevas.
+- Funciones (pedidos, fotos, notificaciones): casi nada, menos de 0,01 crédito por pedido.
+
+Netlify avisa por correo al 50 %, 75 % y 100 % de uso. Se puede revisar en *Netlify → Team → Usage & billing*.
 
 ---
 

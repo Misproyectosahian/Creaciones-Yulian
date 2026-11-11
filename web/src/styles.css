@@ -2678,3 +2678,131 @@ p {
     grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
   }
 }
+
+/* ───────────────────────── Política y cancelación ───────────────────────── */
+
+.policy {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--pink-50);
+  border: 1.5px solid var(--pink-200);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+.policy__title {
+  font-family: var(--font-head);
+  font-weight: 600;
+  color: var(--ink);
+  font-size: 1rem;
+}
+.policy__check {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-weight: 800;
+  color: var(--ink);
+  cursor: pointer;
+}
+.policy__check input {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  margin: 0;
+  accent-color: var(--pink-600);
+}
+
+.cancel-box {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border-radius: 20px;
+  background: #fff8ec;
+  border: 1.5px solid #ffd99a;
+}
+.cancel-box__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cancel-box__head strong {
+  display: block;
+  font-size: 0.9rem;
+}
+.cancel-box__clock {
+  font-size: 1.8rem;
+  animation: wobble-small 2s ease-in-out infinite;
+}
+.cancel-box__time {
+  display: block;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #b8741a;
+  font-variant-numeric: tabular-nums;
+}
+.cancel-box__bar {
+  height: 8px;
+  border-radius: 999px;
+  background: #ffe9c4;
+  overflow: hidden;
+}
+.cancel-box__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #ffc56b, #f0a13a);
+  transition: width 1s linear;
+}
+.cancel-box__note {
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+.cancel-box .btn {
+  justify-self: start;
+}
+.cancel-box__confirm {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1.5px dashed #f2a3b3;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+.cancel-box__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.cancel-box--locked {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--lilac-50);
+  border-color: var(--lilac-200);
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+.cancel-box--locked > span {
+  font-size: 1.5rem;
+}
+.btn--danger-solid {
+  color: #fff;
+  background: #d9534f;
+}
+.btn--danger-solid:hover:not(:disabled) {
+  background: #c6403c;
+}
+
+@keyframes wobble-small {
+  0%,
+  100% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+}

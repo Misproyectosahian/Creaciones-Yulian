@@ -5,6 +5,9 @@
   command = "npm run build"
   publish = "dist"
   functions = "netlify/functions"
+  # Solo publicar si cambió la web (carpeta web/) o este archivo. Cada publicación
+  # gasta 15 créditos del plan gratis, así que cambios en la app o en el LEEME no publican.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ../netlify.toml"
 
 [build.environment]
   # Node 24 para compilar y para las funciones: firebase-admin 14 usa librerías

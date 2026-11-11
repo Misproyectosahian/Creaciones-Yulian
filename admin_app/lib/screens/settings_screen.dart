@@ -36,6 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _facebook = TextEditingController();
   final _tiktok = TextEditingController();
   final _prefix = TextEditingController();
+  final _cancelHours = TextEditingController();
   final _newMethod = TextEditingController();
   List<String> _methods = [];
 
@@ -69,6 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _facebook.text = s.facebook;
     _tiktok.text = s.tiktok;
     _prefix.text = s.orderPrefix;
+    _cancelHours.text = '${s.cancelWindowHours}';
     if (mounted) {
       setState(() {
         _methods = [...s.deliveryMethods];
@@ -85,7 +87,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void dispose() {
     _sub?.cancel();
-    for (final c in [_storeName, _tagline, _about, _whatsapp, _sinpeNumber, _sinpeName, _payment, _instagram, _facebook, _tiktok, _prefix, _newMethod]) {
+    for (final c in [_storeName, _tagline, _about, _whatsapp, _sinpeNumber, _sinpeName, _payment, _instagram, _facebook, _tiktok, _prefix, _cancelHours, _newMethod]) {
       c.dispose();
     }
     super.dispose();
@@ -122,6 +124,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         facebook: _facebook.text,
         tiktok: _tiktok.text,
         orderPrefix: _prefix.text.isEmpty ? 'CY' : _prefix.text,
+        cancelWindowHours: (int.tryParse(_cancelHours.text) ?? 24).clamp(0, 168),
       ));
       Effects.confetti();
       showToast('¡Ajustes guardados! La web ya se actualizó', emoji: '✨');
@@ -336,6 +339,60 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           controller: _tiktok,
                           keyboardType: TextInputType.url,
                           decoration: const InputDecoration(labelText: 'TikTok (enlace)'),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  SectionCard(
+                    title: 'Cancelaciones',
+                    icon: '⏳',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Tiempo que tiene el cliente para cancelar su pedido después de hacerlo. '
+                          'Pasado ese tiempo ya no puede cancelarlo. Se muestra en la web con una cuenta regresiva.',
+                          style: TextStyle(color: AppColors.muted, height: 1.35),
+                        ),
+                        const SizedBox(height: 12),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: [
+                            for (final (hours, label) in const [(0, '🔒 No se puede'), (12, '12 h'), (24, '24 h'), (48, '48 h')])
+                              ChoiceChip(
+                                label: Text(label),
+                                selected: _cancelHours.text == '$hours',
+                                showCheckmark: false,
+                                onSelected: (_) => setState(() => _cancelHours.text = '$hours'),
+                              ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          controller: _cancelHours,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          onChanged: (_) => setState(() {}),
+                          decoration: const InputDecoration(
+                            labelText: 'Horas para cancelar',
+                            suffixText: 'horas',
+                            helperText: 'Poné 0 si los pedidos no se pueden cancelar. Máximo 168 (7 días).',
+                            helperMaxLines: 2,
+                          ),
+                          validator: (v) {
+                            final n = int.tryParse(v ?? '');
+                            if (n == null) return 'Escribí un número de horas';
+                            if (n > 168) return 'Máximo 168 horas (7 días)';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 6),
+                        const Text(
+                          'Solo se puede cancelar mientras el pedido esté "Pendiente de pago" o "Pago recibido". '
+                          'Si cambiás este tiempo, aplica a los pedidos nuevos.',
+                          style: TextStyle(color: AppColors.muted, fontSize: 12.5, height: 1.35),
                         ),
                       ],
                     ),

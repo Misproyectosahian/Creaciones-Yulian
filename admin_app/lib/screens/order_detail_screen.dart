@@ -270,8 +270,39 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             '${o.itemCount} ${o.itemCount == 1 ? 'producto' : 'productos'} · ${formatDate(o.createdAt)}',
             style: const TextStyle(color: AppColors.muted, fontWeight: FontWeight.w700),
           ),
+          ?_cancelInfo(o),
         ],
       ),
+    );
+  }
+
+  /// Aviso sobre la cancelación por parte del cliente.
+  Widget? _cancelInfo(ShopOrder o) {
+    String? text;
+    Color color = AppColors.lilac500;
+    if (o.status == OrderStatus.cancelado && o.cancelledBy == 'cliente') {
+      text = '❌ El cliente canceló este pedido (dentro del plazo permitido).';
+      color = const Color(0xFFD9534F);
+    } else if (o.customerCanCancel) {
+      final left = o.cancelDeadline!.difference(DateTime.now());
+      final h = left.inHours;
+      final m = left.inMinutes.remainder(60);
+      text = '⏳ El cliente todavía puede cancelar: le quedan ${h > 0 ? '$h h ' : ''}$m min (hasta ${formatShortDate(o.cancelDeadline)}).';
+      color = const Color(0xFFE59A2F);
+    } else if (o.cancelDeadline != null && o.status.isActive) {
+      text = '🔒 Pedido firme: el cliente ya no puede cancelarlo.';
+      color = const Color(0xFF3BB58A);
+    }
+    if (text == null) return null;
+    return Container(
+      margin: const EdgeInsets.only(top: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: color.withValues(alpha: 0.45)),
+      ),
+      child: Text(text, style: const TextStyle(fontWeight: FontWeight.w700, height: 1.35)),
     );
   }
 

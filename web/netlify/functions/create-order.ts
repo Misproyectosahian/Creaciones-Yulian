@@ -77,6 +77,11 @@ export default handler(async (req) => {
     throw new HttpError(400, 'La forma de entrega elegida ya no está disponible. Elegí otra.');
   }
   const prefix = (str(settings.orderPrefix, 5).replace(/[^A-Za-z]/g, '') || 'CY').toUpperCase();
+  // Horas que tiene el cliente para cancelar (0 = no se puede cancelar). Por defecto 24.
+  const cancelWindowHours =
+    typeof settings.cancelWindowHours === 'number' && Number.isFinite(settings.cancelWindowHours)
+      ? Math.min(168, Math.max(0, Math.round(settings.cancelWindowHours)))
+      : 24;
 
   // Evitar pedidos repetidos por error (máx. 3 cada 10 minutos)
   const recent = await firestore.collection('orders').where('userId', '==', user.uid).get();
@@ -152,6 +157,9 @@ export default handler(async (req) => {
       neededBy,
       customerNotes,
       adminMessage: '',
+      // El plazo queda fijo en el pedido: si después cambia el ajuste, este pedido no cambia
+      cancelWindowHours,
+      cancelDeadline: cancelWindowHours > 0 ? Timestamp.fromMillis(Date.now() + cancelWindowHours * 3_600_000) : null,
       seen: false,
       createdAt: FieldValue.serverTimestamp(),
       updatedAt: FieldValue.serverTimestamp(),
