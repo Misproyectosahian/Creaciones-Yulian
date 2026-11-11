@@ -1,0 +1,23 @@
+# Dependencias y compilados
+node_modules/
+web/dist/
+.netlify/
+web/.netlify/
+
+# Variables secretas (NUNCA subirlas a GitHub)
+.env
+.env.*
+!.env.example
+*service-account*.json
+*-firebase-adminsdk-*.json
+Clave privada/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Sistema
+.DS_Store
+Thumbs.db
