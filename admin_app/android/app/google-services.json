@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "172585350184",
+    "project_id": "creaciones-yulian",
+    "storage_bucket": "creaciones-yulian.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:172585350184:android:6a749523006c8d9746b11d",
+        "android_client_info": {
+          "package_name": "com.creacionesyulian.yulian_admin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDexwVB9CpFuhxKv1o64KWVaqxiYbEizGg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
